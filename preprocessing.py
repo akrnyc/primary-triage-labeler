@@ -29,10 +29,14 @@ def deSymbolify(text):
 
 def dePunctify(text):
     regex = re.compile('[^\w\s]')
-    return regex.sub(r'', text)
+    return regex.sub(r' ', text)
 
 
 def doc_preprocess(document, trim=None):
+    #function check
+    if trim not in ['lemma', 'stem', None]:
+        return print("Invalid token trimmer arg. Select stem, lemma, or None.")
+
     #convert to lowercase, remove punctuation
     document = dePunctify(document.lower())
     
@@ -47,7 +51,7 @@ def doc_preprocess(document, trim=None):
     tokens = [deSymbolify(deEmojify(word)) for word in tokens]
     tokens = [word for word in tokens if word.isascii()==True]
     tokens = [word for word in tokens if not any(ch.isdigit() for ch in word)]
-    tokens = [word for word in tokens if (len(word) > 4 and len(word) < 12)]
+    tokens = [word for word in tokens if (len(word) >= 4 and len(word) < 12)]
     
     if trim == 'stem':
         #stem tokens
